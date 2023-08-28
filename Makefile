@@ -59,9 +59,6 @@ install_python:
 	pyenv install 3.9.0
 	pyenv global 3.9.0
 
-setup_ssh:
-	chmod 600 ~/.ssh/*
-
 clean_pyenv:
 	sudo rm -r .pyenv 
 	grep -v 'PYENV_ROOT="$$HOME/.pyenv"' ~/.bashrc > ~/.bashrc_temp
@@ -71,13 +68,30 @@ clean_pyenv:
 	rm ~/.bashrc_temp ~/.bashrc_temp2 ~/.bashrc_temp3
 	mv ~/.bashrc_new ~/.bashrc
 
-Linux: ## >> install pyenv for linux
-	git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
-	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-	exec "$SHELL"
-	. ~/.bash_profile
-	echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
+install_tv:
+	wget https://github.com/alexhallam/tv/releases/download/1.4.30/tidy-viewer_1.4.30_amd64.deb
+	sudo dpkg -i tidy-viewer_1.4.30_amd64.deb
+	echo "alias tv='tidy-viewer'" >> ~/.bashrc
+	echo "Finish the install with: source ~/.bashrc"
+
+install_gitui:
+	curl -s curl -s https://api.github.com/repos/extrawurst/gitui/releases/latest | grep -wo "https.*linux.*gz" | wget -qi -
+	tar xzvf gitui-linux-musl.tar.gz
+	rm gitui-linux-musl.tar.gz
+	sudo chmod +x gitui
+	sudo mv gitui /usr/local/bin
+
+install_da:
+	sudo apt-get install ranger trash-cli neofetch ncdu
+
+setup_ssh:
+	chmod 600 ~/.ssh/*
+
+Linux: ## >> Basic installation for Linux
+	@echo '1. run first "make install_initial" to install standard linux package'
+	@echo '2. run "make install_pyenv" to install pyenv'
+	@echo '3. run "make install_python" to install python 3.9 inside pyenv (last stable version)'
+
 
 mz_versions:
 	pyenv versions

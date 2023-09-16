@@ -5,10 +5,12 @@ LABEL maintainer="Cao Tri DO"
 # The default username and password are docker
 
 RUN apt-get update && \
-      apt-get -y install sudo wget curl
+      apt-get -y install sudo wget curl nano make
 
 RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
 USER docker
 CMD /bin/bash
+# WORKDIR "/home/docker"
 
+COPY Makefile /home/docker/Makefile
